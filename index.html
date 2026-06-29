@@ -452,4 +452,538 @@
 <script>
     const questions = [
         { type: "choice", q: "“ถึงบางพูดพูดดีเป็นศรีศักดิ์ มีคนรักรสถ้อยอร่อยจิต แม้นพูดชั่วตัวตายทำลายมิตร จะชอบผิดในมนุษย์เพราะพูดจา” จากเรื่องใด?", choices: ["ก. นิราศนรินทร์คำโคลง", "ข. โคลงโลกนิติ", "ค. นิราศภูเขาทอง", "ง. สุภาษิตพระร่วง"], ans: 2 },
-        { type: "fill", q: "สำนวน: “งานการที่ปล่อยไว้ให้สะสมค้างคา จนทำให้ลำบากเดือดร้อน”", ans: "ดินพอกหางหมู", letters: "กขคงจฉชซตถทนบปผฝพ
+        { type: "fill", q: "สำนวน: “งานการที่ปล่อยไว้ให้สะสมค้างคา จนทำให้ลำบากเดือดร้อน”", ans: "ดินพอกหางหมู", letters: "กขคงจฉชซตถทนบปผฝพฟมยรลวส" },
+        { type: "choice", q: "รามเกียรติ์ ตอนนารายณ์ปราบนนทก พระนารายณ์แปลงเป็นใครหลอกล่อนนทก และสาปให้ไปเกิดเป็นใคร?", choices: ["ก. พระแม่ลักษมี - อินทรชิต", "ข. พระอิศวร - ไมยราพ", "ค. นางสุวรรณอัปสร - ทศกัณฐ์", "ง. พระราม - ทศกัณฐ์"], ans: 2 },
+        { type: "fill", q: "สำนวน: “หน้าตาแสดงความเมตตา แต่ใจโหดเหี้ยม”", ans: "หน้าเนื้อใจเสือ", letters: "กขคงจฉชซตถทนบปผฝพฟมยรลว" },
+        { type: "choice", q: "การที่ 'นายล้ำ' ยอมถอยและไม่แสดงตัวว่าเป็นพ่อแม่ลออ มีสาเหตุสำคัญที่สุดจากสิ่งใด?", choices: ["ก. เพราะเห็นความรักบริสุทธิ์และอนาคตที่สดใสของลูก", "ข. เพราะกลัวพระยาภักดีนฤนาถจะแจ้งความจับตน", "ค. เพราะต้องการเงินที่เสนอให้", "ง. เพราะรู้ว่าตัวเองไม่มีสมบัติจะไปสู้"], ans: 0 },
+        { type: "fill", q: "สำนวน: \"คนที่ไม่ถูกกัน ไม่ลงรอยกัน หรือมีนิสัยเข้ากันไม่ได้\"", ans: "ขมิ้นกับปูน", letters: "กขคงจฉชซตถทนบปผฝพฟมยรลวสฬอ" },
+        { type: "choice", q: "มหาเวสสันดรชาดก กัณฑ์ฉกษัตริย์ ฝนที่ตกช่วยกษัตริย์ทั้ง 6 ให้ฟื้นคืนสติชื่อว่าอะไร?", choices: ["ก. ฝนห่าแก้ว", "ข. ฝนสัตตรัตนมาศ", "ค. ฝนตกแดดออก", "ง. ฝนโบกขรพรรษ"], ans: 3 },
+        { type: "fill", q: "อะไรเอ่ย: ขาเรียวเล็ก คนเจ๊กชอบใช้", ans: "ตะเกียบ", letters: "กขคงจฉชซตถทนบปผฝพฟมยรลวสฬอ" },
+        { type: "choice", q: "ลิลิตตะเลงพ่าย พระนเรศวรทรงฝันว่าชนะจระเข้ใหญ่ หมายถึงมีชัยเหนือผู้ใด?", choices: ["ก. ชนะต่อสภาพอากาศเลวร้าย", "ข. ชนะต่อพระเจ้าตะเบ็งชเวตี้", "ค. ชนะต่อพระมหาอุปราชา", "ง. ชนะต่อพระเจ้าบุเรงนอง"], ans: 2 },
+        { type: "fill", q: "อะไรเอ่ย: เช้าๆ เข้าถ้ำ ค่ำๆ ออกมาเรียงราย", ans: "ดาว", letters: "กขคงจฉชซตถทนบปผฝพฟมยรลวสฬอ" },
+        { type: "choice", q: "“เต็งแต้วแก้วกาหลง บานบุษบงส่งกลิ่นอาย...” มีดอกไม้ทั้งหมดกี่ชนิด?", choices: ["ก. 1 ชนิด", "ข. 2 ชนิด", "ค. 3 ชนิด", "ง. 4 ชนิด"], ans: 3 },
+        { type: "fill", q: "อะไรเอ่ย: ตาแก่หลังโก่ง เดินโทงๆ กินข้าวทั่วทุ่ง", ans: "เคียว", letters: "กขคงจฉชซตถทนบปผฝพฟมยรลวสฬอ" }
+    ];
+
+    let currentQ = 0, score = 0, hearts = 3;
+    let currentInput = [];
+    let currentSlotIndex = 0; 
+    let historyTracker = []; 
+    let lastHoveredElement = null;
+    let hoverStartTime = null; 
+    let textSlotsStructure = [];
+    let isHintUsedForCurrentQ = false;
+    let isSensorLocked = false; 
+    let isGachaScreenActive = false; 
+    let isRulesActive = true; 
+
+    function showGameAlert(text, type = 'info', callback = null) {
+        let alertDiv = document.getElementById("custom-alert");
+        alertDiv.className = `alert-box alert-${type} show`;
+        alertDiv.innerText = text;
+        setTimeout(() => {
+            alertDiv.classList.remove("show");
+            if(callback) callback();
+        }, 1800);
+    }
+
+    function parseThaiString(str) {
+        let result = [];
+        const topVowels = ['ิ', 'ี', 'ึ', 'ื', 'ั', '่', '้', '๊', '๋', '์', 'ํ', '็'];
+        const bottomVowels = ['ุ', 'ู', '̥'];
+        
+        for (let i = 0; i < str.length; i++) {
+            let char = str[i];
+            if (topVowels.includes(char) || bottomVowels.includes(char)) {
+                if (result.length > 0) {
+                    let last = result[result.length - 1];
+                    if (topVowels.includes(char)) last.top += char;
+                    if (bottomVowels.includes(char)) last.bottom += char;
+                }
+            } else {
+                result.push({ base: char, top: '', bottom: '' });
+            }
+        }
+        return result;
+    }
+
+    function startGameNow() {
+        isRulesActive = false;
+        document.getElementById("rules-screen").style.display = "none";
+        document.getElementById("game-play").style.display = "block";
+        initGame();
+    }
+
+    function initGame() {
+        if(currentQ >= questions.length) { endGame(); return; }
+        
+        isSensorLocked = true;
+        resetSensorTracking();
+        setTimeout(() => { isSensorLocked = false; }, 1000);
+
+        isHintUsedForCurrentQ = false;
+        currentInput = [];
+        historyTracker = [];
+        currentSlotIndex = 0; 
+        
+        document.getElementById("clear-btn").disabled = false;
+        document.getElementById("question-number").innerText = `ข้อที่ ${currentQ + 1}/${questions.length}`;
+        document.getElementById("score-display").innerText = `คะแนน: ${score}`;
+        document.getElementById("hint-button").disabled = (hearts <= 0);
+        document.getElementById("hint-button").style.display = "inline-block";
+        document.getElementById("next-action-container").style.display = "none"; 
+
+        let qData = questions[currentQ];
+        document.getElementById("question-text").innerText = qData.q;
+
+        if(qData.type === "choice") {
+            document.getElementById("choices-container").style.display = "block";
+            document.getElementById("fill-container").style.display = "none";
+            renderChoices(qData);
+        } else {
+            document.getElementById("choices-container").style.display = "none";
+            document.getElementById("fill-container").style.display = "block";
+            renderFill(qData);
+        }
+    }
+
+    function renderChoices(qData) {
+        let container = document.getElementById("choices-container");
+        container.innerHTML = "";
+        qData.choices.forEach((choice, idx) => {
+            let btn = document.createElement("button");
+            btn.className = "btn";
+            btn.id = `choice-${idx}`;
+            btn.innerHTML = `<div class="btn-progress"></div><span class="btn-text">${choice}</span>`;
+            btn.onclick = (e) => {
+                btn.classList.add("btn-pop-active");
+                checkChoiceAnswer(idx);
+            };
+            container.appendChild(btn);
+        });
+    }
+
+    function checkChoiceAnswer(selectedIdx) {
+        if (isSensorLocked) return; 
+        isSensorLocked = true; 
+        
+        let currentQuestionObj = questions[currentQ];
+        
+        let allChoiceBtns = document.querySelectorAll("#choices-container .btn");
+        allChoiceBtns.forEach(btn => btn.disabled = true);
+        document.getElementById("hint-button").style.display = "none";
+
+        setTimeout(() => {
+            if(selectedIdx === currentQuestionObj.ans) {
+                score++;
+                showGameAlert("✨ ถูกต้องเก่งที่สุดเลย! ✨", "success", () => { handleQuestionEndFeedback(); });
+            } else {
+                let correctText = currentQuestionObj.choices[currentQuestionObj.ans];
+                showGameAlert(`❌ ยังไม่ถูกน้า! เฉลยคือ "${correctText}"`, "danger", () => { handleQuestionEndFeedback(); });
+            }
+        }, 400); 
+    }
+
+    function renderFill(qData) {
+        textSlotsStructure = parseThaiString(qData.ans);
+        currentInput = new Array(textSlotsStructure.length).fill(""); 
+        
+        let slotsContainer = document.getElementById("answer-slots");
+        slotsContainer.innerHTML = "";
+
+        textSlotsStructure.forEach((item, i) => {
+            let group = document.createElement("div");
+            group.className = "slot-group";
+            
+            if(item.top) {
+                let topDiv = document.createElement("div");
+                topDiv.className = "slot-decor slot-top";
+                topDiv.innerText = item.top;
+                group.appendChild(topDiv);
+            }
+            let baseDiv = document.createElement("div");
+            baseDiv.className = "slot-base";
+            baseDiv.id = `fill-base-${i}`;
+            group.appendChild(baseDiv);
+
+            if(item.bottom) {
+                let botDiv = document.createElement("div");
+                botDiv.className = "slot-decor slot-bottom";
+                botDiv.innerText = item.bottom;
+                group.appendChild(botDiv);
+            }
+            slotsContainer.appendChild(group);
+        });
+
+        let requiredBases = textSlotsStructure.map(el => el.base); 
+        let extraPool = parseThaiString(qData.letters).map(el => el.base);
+        let dynamicExtras = extraPool.filter(char => !requiredBases.includes(char)).slice(0, 24 - requiredBases.length);
+        
+        let finalPool = [...requiredBases, ...dynamicExtras];
+        finalPool.sort(() => Math.random() - 0.5);
+
+        let gridContainer = document.getElementById("grid-container");
+        gridContainer.innerHTML = "";
+        finalPool.forEach((char, idx) => {
+            let box = document.createElement("button");
+            box.className = "grid-item";
+            box.id = `grid-letter-${idx}`;
+            box.dataset.letter = char;
+            box.innerHTML = `<div class="btn-progress"></div><span class="btn-text">${char}</span>`;
+            box.onclick = () => {
+                box.classList.add("btn-pop-active");
+                pressLetter(char, box.id);
+                setTimeout(() => box.classList.remove("btn-pop-active"), 400);
+            };
+            gridContainer.appendChild(box);
+        });
+        
+        moveToNextValidSlot();
+        updateSlots();
+    }
+
+    function moveToNextValidSlot() {
+        let maxLen = textSlotsStructure.length;
+        while (currentSlotIndex < maxLen && isHintUsedForCurrentQ && isHintPosition(currentSlotIndex)) {
+            currentSlotIndex++;
+        }
+    }
+
+    function pressLetter(char, buttonId) {
+        if (isSensorLocked) return; 
+        let maxLen = textSlotsStructure.length;
+        
+        if (currentSlotIndex < maxLen) {
+            currentInput[currentSlotIndex] = char;
+            historyTracker.push({ slotIndex: currentSlotIndex, btnId: buttonId });
+            
+            if (buttonId) {
+                let targetBtn = document.getElementById(buttonId);
+                if(targetBtn) {
+                    targetBtn.style.visibility = "hidden";
+                    targetBtn.disabled = true; 
+                }
+            }
+            
+            currentSlotIndex++; 
+            moveToNextValidSlot(); 
+            updateSlots();
+        }
+
+        let totalFilledCount = 0;
+        for (let i = 0; i < maxLen; i++) {
+            if (currentInput[i] && currentInput[i] !== "") totalFilledCount++;
+        }
+
+        if (totalFilledCount === maxLen) {
+            isSensorLocked = true;
+            let finalUserAns = "";
+            textSlotsStructure.forEach((item, idx) => {
+                finalUserAns += currentInput[idx] + item.top + item.bottom;
+            });
+
+            document.getElementById("clear-btn").disabled = true;
+            let allGridItems = document.querySelectorAll(".grid-item");
+            allGridItems.forEach(item => item.disabled = true);
+            document.getElementById("hint-button").style.display = "none";
+
+            setTimeout(() => {
+                if(finalUserAns === questions[currentQ].ans) {
+                    score++;
+                    showGameAlert("✨ ตอบถูกแล้ว ยอดเยี่ยมมาก! ✨", "success", () => { handleQuestionEndFeedback(); });
+                } else {
+                    showGameAlert(`❌ ยังไม่ถูกน้า เฉลยคือ "${questions[currentQ].ans}"`, "danger", () => { handleQuestionEndFeedback(); });
+                }
+            }, 400);
+        }
+    }
+
+    function handleQuestionEndFeedback() {
+        if (currentQ === questions.length - 1) {
+            endGame(); 
+        } else {
+            isSensorLocked = false;
+            document.getElementById("next-action-container").style.display = "block";
+        }
+    }
+
+    function goToNextQuestion() {
+        currentQ++;
+        initGame();
+    }
+
+    function deleteLastLetter() {
+        if (isSensorLocked || historyTracker.length === 0) return;
+        
+        let lastAction = historyTracker.pop();
+        
+        if (lastAction) {
+            currentInput[lastAction.slotIndex] = ""; 
+            currentSlotIndex = lastAction.slotIndex; 
+            
+            if (lastAction.btnId) {
+                let targetBtn = document.getElementById(lastAction.btnId);
+                if (targetBtn) {
+                    targetBtn.style.visibility = "visible";
+                    targetBtn.disabled = false;
+                }
+            }
+            updateSlots();
+        }
+    }
+
+    function isHintPosition(idx) {
+        let ansString = questions[currentQ].ans;
+        let positions = [0];
+        if (ansString === "ดินพอกหางหมู") positions = [0, 3, 6, 9];
+        else if (ansString === "หน้าเนื้อใจเสือ") positions = [0, 3, 6, 8];
+        else if (ansString === "ขมิ้นกับปูน") positions = [0, 4, 7];
+        else if (ansString === "ตะเกียบ") positions = [0, 2, 4];
+        return positions.includes(idx);
+    }
+    
+    function updateSlots() {
+        textSlotsStructure.forEach((item, i) => {
+            document.getElementById(`fill-base-${i}`).innerText = currentInput[i] ? currentInput[i] : "";
+        });
+    }
+
+    function applyFillHint() {
+        let ansString = questions[currentQ].ans;
+        historyTracker = [];
+        currentInput = new Array(textSlotsStructure.length).fill(""); 
+        
+        let hintPositions = [0]; 
+        if (ansString === "ดินพอกหางหมู") hintPositions = [0, 3, 6, 9]; 
+        else if (ansString === "หน้าเนื้อใจเสือ") hintPositions = [0, 3, 6, 8]; 
+        else if (ansString === "ขมิ้นกับปูน") hintPositions = [0, 4, 7]; 
+        else if (ansString === "ตะเกียบ") hintPositions = [0, 2, 4]; 
+        else if (ansString === "ดาว") hintPositions = [0]; 
+        else if (ansString === "เคียว") hintPositions = [0]; 
+
+        textSlotsStructure.forEach((item, idx) => {
+            if (hintPositions.includes(idx)) {
+                currentInput[idx] = item.base;
+                
+                let allGridButtons = document.querySelectorAll(".grid-item");
+                for (let btn of allGridButtons) {
+                    if (btn.dataset.letter === item.base && btn.style.visibility !== "hidden") {
+                        btn.style.visibility = "hidden";
+                        btn.disabled = true;
+                        break;
+                    }
+                }
+            }
+        });
+        
+        currentSlotIndex = 0;
+        moveToNextValidSlot(); 
+        updateSlots();
+    }
+
+    function useHint() {
+        if(hearts <= 0 || isHintUsedForCurrentQ || isSensorLocked) return;
+        
+        let hintBtn = document.getElementById("hint-button");
+        hintBtn.classList.add("btn-pop-active");
+        setTimeout(() => hintBtn.classList.remove("btn-pop-active"), 400);
+
+        hearts--;
+        isHintUsedForCurrentQ = true;
+        
+        let heartStr = "";
+        for(let i=0; i<hearts; i++) heartStr += "💖 ";
+        document.getElementById("heart-display").innerText = heartStr || "💔 หมดแย้ว";
+        hintBtn.disabled = true;
+
+        let qData = questions[currentQ];
+        
+        if(qData.type === "choice") {
+            let wrongIndices = [];
+            qData.choices.forEach((_, idx) => {
+                if (idx !== qData.ans) wrongIndices.push(idx);
+            });
+            wrongIndices.sort(() => Math.random() - 0.5);
+            let toCut = wrongIndices.slice(0, 2);
+            
+            toCut.forEach(idx => {
+                let wrongBtn = document.getElementById(`choice-${idx}`);
+                if(wrongBtn) wrongBtn.disabled = true;
+            });
+            showGameAlert("🔮 ระบบช่วยตัดตัวเลือกที่ผิดออกให้ 2 ข้อแล้วครับ!", "info");
+        } else {
+            applyFillHint();
+            showGameAlert("🔮 ระบบช่วยเปิดพยัญชนะต้นหลักครบทุกคำให้แล้วจ้า!", "info");
+        }
+    }
+
+    function endGame() {
+        isGachaScreenActive = true; 
+        isSensorLocked = false; 
+        document.getElementById("game-play").style.display = "none";
+        document.getElementById("gacha-screen").style.display = "block";
+        document.getElementById("final-score").innerText = score;
+        
+        document.getElementById("gift-box").innerHTML = "🎁"; 
+        document.getElementById("gacha-result").innerText = "";
+        document.getElementById("gacha-btn").disabled = false;
+
+        let chance = score === 12 ? 100 : score >= 10 ? 80 : score >= 8 ? 50 : score >= 6 ? 20 : score >= 4 ? 10 : score >= 1 ? 5 : 0;
+        document.getElementById("chance-text").innerText = `โอกาสเปิดเจอกล่องรางวัลคือ: ${chance}%`;
+    }
+
+    function drawGacha() {
+        let gachaBtn = document.getElementById("gacha-btn");
+        if (gachaBtn.disabled) return;
+        
+        gachaBtn.classList.add("btn-pop-active");
+        
+        let giftBox = document.getElementById("gift-box");
+        let resText = document.getElementById("gacha-result");
+        
+        resText.innerHTML = "⏳ กำลังเขย่าลุ้นรับรางวัล ดุ๊กดิ๊กๆ...";
+        resText.style.color = "#ff9f43";
+
+        giftBox.className = "gift-box-container opening"; 
+
+        setTimeout(() => {
+            gachaBtn.disabled = true; 
+        }, 100);
+
+        setTimeout(() => {
+            giftBox.className = "gift-box-container"; 
+            gachaBtn.classList.remove("btn-pop-active");
+            
+            let chance = score === 12 ? 100 : score >= 10 ? 80 : score >= 8 ? 50 : score >= 6 ? 20 : score >= 4 ? 10 : score >= 1 ? 5 : 0;
+            let roll = Math.random() * 100;
+            
+            if(roll <= chance) { 
+                giftBox.innerHTML = "🎉✨💥✨🎉"; 
+                resText.style.color = "#2ecc71"; 
+                resText.innerHTML = "🎉 ยินดีด้วย! คุณได้รับรางวัลใหญ่"; 
+            } else { 
+                giftBox.innerHTML = "🥺💔"; 
+                resText.style.color = "#e74c3c"; 
+                resText.innerHTML = "เสียใจด้วยคุณยังไม่ได้รางวัล ไว้มาลองใหม่น้า"; 
+            }
+        }, 1500);
+    }
+
+    // ==========================================
+    // 🎥 ระบบจับพิกัด และฟังก์ชันชาร์จหลอดสีชมพู
+    // ==========================================
+    const videoElement = document.getElementById('webcam-video');
+    const canvasElement = document.getElementById('output-canvas');
+    const canvasCtx = canvasElement.getContext('2d');
+    const cursorElement = document.getElementById('hand-pointer');
+
+    function onResults(results) {
+        canvasElement.width = videoElement.videoWidth;
+        canvasElement.height = videoElement.videoHeight;
+        canvasCtx.save();
+        canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+        canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+
+        if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+            document.getElementById("webcam-status").style.display = "none";
+            
+            if (isSensorLocked && !isGachaScreenActive && !isRulesActive && document.getElementById("next-action-container").style.display !== "block") {
+                cursorElement.style.display = "none";
+                resetSensorTracking();
+                canvasCtx.restore();
+                return;
+            }
+
+            cursorElement.style.display = "block";
+            
+            const hand = results.multiHandLandmarks[0];
+            drawConnectors(canvasCtx, hand, HAND_CONNECTIONS, {color: '#ffb7b7', lineWidth: 4});
+            drawLandmarks(canvasCtx, hand, {color: '#ffffff', lineWidth: 1, radius: 4});
+
+            const indexFinger = hand[8];
+            const screenX = (1 - indexFinger.x) * window.innerWidth;
+            const screenY = indexFinger.y * window.innerHeight;
+            
+            cursorElement.style.left = screenX + 'px';
+            cursorElement.style.top = screenY + 'px';
+
+            const element = document.elementFromPoint(screenX, screenY);
+            let targetButton = null;
+
+            if (element) {
+                if (element.classList.contains('btn') || element.classList.contains('grid-item')) {
+                    targetButton = element;
+                } else if (element.parentElement && (element.parentElement.classList.contains('btn') || element.parentElement.classList.contains('grid-item'))) {
+                    targetButton = element.parentElement;
+                }
+            }
+
+            if (targetButton && !targetButton.disabled && targetButton.style.visibility !== "hidden") {
+                if (lastHoveredElement && lastHoveredElement !== targetButton) {
+                    resetSensorTracking();
+                }
+
+                if (lastHoveredElement !== targetButton) {
+                    lastHoveredElement = targetButton;
+                    hoverStartTime = Date.now();
+                    cursorElement.classList.add('hovering');
+                    
+                    if (targetButton.id === "gacha-btn" || targetButton.id === "start-game-btn" || targetButton.id === "next-q-btn" || targetButton.id === "clear-btn") {
+                        targetButton.classList.add("pulse-shake");
+                    }
+                }
+
+                const elapsed = Date.now() - hoverStartTime;
+                const progressPercent = Math.min((elapsed / 2000) * 100, 100);
+                
+                const progressBg = targetButton.querySelector('.btn-progress');
+                if (progressBg) {
+                    progressBg.style.width = progressPercent + '%'; 
+                }
+
+                if (elapsed >= 2000) {
+                    targetButton.click();
+                    resetSensorTracking();
+                }
+            } else {
+                resetSensorTracking();
+            }
+        } else {
+            cursorElement.style.display = "none";
+            resetSensorTracking();
+        }
+        canvasCtx.restore();
+    }
+
+    function resetSensorTracking() {
+        if (lastHoveredElement) {
+            const progressBg = lastHoveredElement.querySelector('.btn-progress');
+            if (progressBg) progressBg.style.width = '0%';
+            
+            lastHoveredElement.classList.remove("pulse-shake");
+        }
+        cursorElement.classList.remove('hovering');
+        lastHoveredElement = null;
+        hoverStartTime = null;
+    }
+
+    const hands = new Hands({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
+    hands.setOptions({ maxNumHands: 1, modelComplexity: 1, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
+    hands.onResults(onResults);
+
+    const camera = new Camera(videoElement, {
+        onFrame: async () => { await hands.send({image: videoElement}); },
+        width: 640, height: 480
+    });
+    
+    camera.start()
+        .then(() => { 
+            document.getElementById("webcam-status").innerText = "กล้องจับสัญญาณนิ้วมือพร้อมแล้ว! ชูนิ้วชี้เล็งค้างที่ปุ่มได้เลยน้า"; 
+        })
+        .catch(err => { 
+            document.getElementById("webcam-status").innerText = "❌ กล้องเปิดใช้งานไม่ได้จากระบบไฟล์เครื่องตรงๆ";
+        });
+</script>
+
+</body>
+</html>
